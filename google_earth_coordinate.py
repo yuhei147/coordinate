@@ -3,7 +3,8 @@ import simplekml
 
 st.title('緯度経度作成くん')
 st.write('google_earthで表示するのに必要なkmlファイルを作成してくれます')
-title= st.text_input("NOTAM番号をコピペしてください 👇",)
+title= st.text_input("NOTAM番号をコピペしてください。file nameの関係上"/"はスペースに変換されます👇",)
+title=title.replace("/", " ")
 raw_coordinates = st.text_input("座標をコピペしてください 👇",)
 def dms_to_decimal(data):
     data, syousuu = data.split('.')
