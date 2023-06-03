@@ -31,26 +31,43 @@ def coordinate_conversion(input_coordinates):
     return result
 
 if st.button('kmlファイル作成'):
-    input_coordinates = [coord for coord in raw_coordinates.replace("\n", " ").split(" ") if coord]
+    if len(raw_coordinates) < 25:
+        input_coordinates = [coord for coord in raw_coordinates.replace("\n", " ").split(" ") if coord]
 
-    converted_coordinates = coordinate_conversion(input_coordinates)
+        converted_coordinates = coordinate_conversion(input_coordinates)
 
+        # KMLオブジェクトを作成
+        kml = simplekml.Kml()
 
-    # KMLオブジェクトを作成
-    kml = simplekml.Kml()
+        # Placemarkを作成
+        pol = kml.newpoint(name="OBST")
+        
+        for coord in converted_coordinates:
+            pol.coords.addcoordinates([(coord[0], coord[1])])
 
-    # 緯度と経度のリストを作成します
-    coords = converted_coordinates
+        pol.style.iconstyle.icon.href = 'http://maps.google.com/mapfiles/kml/paddle/red-circle.png'
 
-    # 最初の座標をリストの最後に追加して閉じたポリゴンを作成
-    coords.append(coords[0])
+    else:
+        input_coordinates = [coord for coord in raw_coordinates.replace("\n", " ").split(" ") if coord]
 
-    # ポリゴン（多角形）を作成
-    pol = kml.newpolygon(name="Polygon", outerboundaryis=coords)
+        converted_coordinates = coordinate_conversion(input_coordinates)
 
-    pol.linestyle.color = simplekml.Color.red  # 色の指定
-    pol.linestyle.width = 4  # 太さの指定
-    pol.polystyle.color = simplekml.Color.changealphaint(0, simplekml.Color.red)  # ポリゴンの塗りつぶしを無効化
+        # KMLオブジェクトを作成
+        kml = simplekml.Kml()
+
+        # 緯度と経度のリストを作成します
+        coords = converted_coordinates
+
+        # 最初の座標をリストの最後に追加して閉じたポリゴンを作成
+        coords.append(coords[0])
+
+        # ポリゴン（多角形）を作成
+        pol = kml.newpolygon(name="Polygon", outerboundaryis=coords)
+
+        pol.linestyle.color = simplekml.Color.red  # 色の指定
+        pol.linestyle.width = 4  # 太さの指定
+        pol.polystyle.color = simplekml.Color.changealphaint(0, simplekml.Color.red)  # ポリゴンの塗りつぶしを無効化
+
 
     # KMLファイル
     title=title.replace("/", " ")
