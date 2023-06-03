@@ -40,7 +40,7 @@ if st.button('kmlファイル作成'):
         kml = simplekml.Kml()
 
         # Placemarkを作成
-        pol = kml.newpoint(name="OBST")
+        pol = kml.newpoint(name="Point")
         
         for coord in converted_coordinates:
             pol.coords.addcoordinates([(coord[0], coord[1])])
