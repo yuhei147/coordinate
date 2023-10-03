@@ -23,8 +23,13 @@ def coordinate_conversion(input_coordinates):
         lat_part = parts[0]  # 緯度
         lon_part = parts[1].replace('E', '')  # 経度
 
-        latitude = round(dms_to_decimal(lat_part), 6)
-        longitude = round(dms_to_decimal(lon_part), 6)
+        if type(lat_part)==int or type(lon_part)==int:
+            latitude = round(dms_to_decimal(lat_part), 6)
+            longitude = round(dms_to_decimal(lon_part), 6)
+        else:
+            latitude = lat_part
+            longitude =lon_part
+
 
         result.append((longitude, latitude))  # タプルの順序を(latitude, longitude)に変更
 
