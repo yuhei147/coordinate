@@ -5,11 +5,19 @@ st.title('緯度経度作成くん')
 st.write('google_earthで表示するのに必要なkmlファイルを作成してくれます')
 title= st.text_input("NOTAM番号をコピペしてください 👇file nameのため、/はスペースに変換されます",)
 raw_coordinates = st.text_input("座標をコピペしてください 👇",)
+
 def dms_to_decimal(data):
-    data, syousuu = data.split('.')
-    seconds = data[-2:] + '.' + syousuu
+    # 秒の部分を抽出
+    if '.' in data:
+        data, syousuu = data.split('.')
+        seconds = data[-2:] + '.' + syousuu
+    else:
+        seconds = data[-2:]
+    
     minutes = data[-4:-2]
     degrees = data[:-4]
+
+    # 度、分、秒を10進数形式に変換
     decimal = int(degrees) + int(minutes) / 60 + float(seconds) / 3600
     return decimal
 
@@ -23,13 +31,8 @@ def coordinate_conversion(input_coordinates):
         lat_part = parts[0]  # 緯度
         lon_part = parts[1].replace('E', '')  # 経度
 
-        if type(lat_part)==int or type(lon_part)==int:
-            latitude = round(dms_to_decimal(lat_part), 6)
-            longitude = round(dms_to_decimal(lon_part), 6)
-        else:
-            latitude = lat_part
-            longitude =lon_part
-
+        latitude = round(dms_to_decimal(lat_part), 6)
+        longitude = round(dms_to_decimal(lon_part), 6)
 
         result.append((longitude, latitude))  # タプルの順序を(latitude, longitude)に変更
 
